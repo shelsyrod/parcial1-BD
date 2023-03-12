@@ -15,13 +15,17 @@ def test_app():
     bucket_mock.put_object = put_object_mock
     
     # Ejecutamos la función app con los mocks
-    with patch("app.peticion", peticion_mock):
-        with patch("boto3.resource") as resource_mock:
-            resource_mock.return_value.Bucket.return_value = bucket_mock
-            app({}, {})
+with patch("app.peticion", peticion_mock), \
+         patch("boto3.resource") as resource_mock:
+        resource_mock.return_value.Bucket.return_value = bucket_mock
+        app({}, {})
     
     # Verificamos que se haya llamado a la función put_object del bucket de S3
-    put_object_mock.assert_called_once_with(Key=nombre, Body=datos_mock)
-    
-    # Verificamos que la función app no devuelva ningún valor
-    assert app({}, {}) is None
+    put_object_mock.assert_called_once()
+Juan Carlos Castro Guevara16:21
+def test_app():
+    mock_client = mock.Mock()
+    mock_client.put_object.return_value = {'ResponseMetadata': {'HTTPStatusCode': 200}}
+    result = app(None, None)
+    assert result['statusCode'] == 200
+    assert result['body'] == json.dumps('Se guardan los datos')

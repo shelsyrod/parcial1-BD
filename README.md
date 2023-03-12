@@ -17,7 +17,5 @@ Herramientas que utilizamos para el proyecto
 
 ## Autores ✒️
 
-_Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
-
 * **Juan Carlos Castro Guevara**  - [Correo Institucional](juan.castro03usa.edu.com)
 * **Shelsy Natalia Rodriguez Barajas**  - [Correo Institucional](shelsy.rodriguez01@cusa.edu.co)

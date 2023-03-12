@@ -1,6 +1,6 @@
 # Primer Parcial
 
-En este repositorio se encuentra el proyecto correspondiente a el parcial del primer corte de la Big Data, en este repositorio se encuentra, las funciones,
+En este repositorio se encuentra el proyecto correspondiente a el parcial del primer corte de la Big Data, en este repositorio se encuentra, las funciones, requerimientos, las configuraciones de zappa y el flujo de trabajo
 
 ## Construido con 🛠️
 

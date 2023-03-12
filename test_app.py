@@ -1,26 +1,27 @@
 from unittest import mock
 from app import app
-import json
+import json    
+from unittest.mock import MagicMock
+import datetime
 
 def test_app():
-    # Creamos una instancia del objeto Mock para la función 'peticion'
-    peticion_mock = mock.Mock(return_value="Estos son los datos de la petición")
+    # Simulamos la respuesta de la función peticion
+    datos_mock = "datos de prueba"
+    peticion_mock = MagicMock(return_value=datos_mock)
     
-    # Configuramos la función 'boto3.resource' para que retorne una instancia de nuestra clase Mock
-    with mock.patch('boto3.resource', return_value=MockS3Bucket()):
-        # Configuramos la función 'peticion' para que retorne un valor específico
-        with mock.patch('my_module.peticion', peticion_mock):
-            # Llamamos a la función 'app' con argumentos dummy
-            result = app("event", "context")
+    # Simulamos la conexión al bucket de S3
+    bucket_mock = MagicMock()
+    put_object_mock = MagicMock()
+    bucket_mock.put_object = put_object_mock
     
-    # Verificamos que la función 'peticion' fue llamada una vez
-    peticion_mock.assert_called_once()
+    # Ejecutamos la función app con los mocks
+    with patch("app.peticion", peticion_mock):
+        with patch("boto3.resource") as resource_mock:
+            resource_mock.return_value.Bucket.return_value = bucket_mock
+            app({}, {})
     
-    # Verificamos que se llamó a la función 'put_object' de nuestro objeto Mock
-    assert MockS3Bucket().put_object.called_once()
+    # Verificamos que se haya llamado a la función put_object del bucket de S3
+    put_object_mock.assert_called_once_with(Key=nombre, Body=datos_mock)
     
-    # Verificamos que la respuesta de la función 'app' es la esperada
-    assert result == {
-        'statusCode': 200,
-        'body': json.dumps('Se guardan los datos')
-    }
+    # Verificamos que la función app no devuelva ningún valor
+    assert app({}, {}) is None

@@ -1,0 +1,50 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+    - name: Install dependencies
+      env:
+        VIRTUALENV: env
+      run: |
+        pip install virtualenv
+        virtualenv -p python $VIRTUALENV
+        source $VIRTUALENV/bin/activate
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install awscli
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ASIAQBGNYHYHDBXIYMTC
+        aws-secret-access-key: OxziBr3Am2ZZWBOFJ8YEBLs2lUX9wmmDbUSbzTwA
+        aws-session-token:  FwoGZXIvYXdzEAMaDPxde86UqjLreTociiLFAbSwTXvQ2iFLDqmZSeFhhJUDUrfCZJLrUSH11FNTDkdgY+4GSLMV4RO8jNXMwxLhTCPIqtVAg+jN6UZJQ3Ts3jHpRnfKHOVcrZgGrPV9mlXee3ykIBC/JnCz4hbwD2uZ0UwER0JBD2vWas8WJ0JQ2Ri1WJBGKIgsYQ/UELtg6M+H6+CaPoT7rRWRSYFsb635RUAOsg4nSwovU5BAgLstaVc4tnYDjLU5Oy9qibk5oBVnqJ1wG0S9SAwRW1g98f9Q0PSevCXpKIWjuKAGMi5eF1GcmBCeRBaz0Wc4QNxF2FE2Tuaev+p0EOmv3ddKTFAXsKkJmdh+eBI/yQb0
+        aws-region: "us-east-1"       
+        
+        
+        
+    
+    - name: EjecutarTodo y test
+      env:
+        VIRTUALENV: env
+      run: |
+        source $VIRTUALENV/bin/activate
+        zappa deploy dev
+        zappa deploy dev2
+        source $VIRTUALENV/bin/activate
+        zappa invoke dev app.app    
+        pytest test_app.py
+

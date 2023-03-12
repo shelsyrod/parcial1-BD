@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.8"
+        
     - name: Install dependencies
       env:
         VIRTUALENV: env
@@ -24,6 +25,7 @@ jobs:
         pip install virtualenv
         virtualenv -p python $VIRTUALENV
         source $VIRTUALENV/bin/activate
+        pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install awscli
         
@@ -48,8 +50,8 @@ jobs:
         VIRTUALENV: env
       run: |
         source $VIRTUALENV/bin/activate
-        zappa deploy dev
-        zappa deploy dev2
+        zappa update dev
+        zappa update dev2
         source $VIRTUALENV/bin/activate
         zappa invoke dev app.app    
         pytest test_app.py
